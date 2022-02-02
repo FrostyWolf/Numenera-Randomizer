@@ -1,6 +1,6 @@
 function Get-GoogleSheets {
     param(
-        $Url
+        [string]$Url
     )
 
     $urlsplit = $url.split("/")
