@@ -1,8 +1,8 @@
 function Set-Settings {
     param(
-        [string]$Oddities,
-        [string]$Cyphers,
-        [string]$Artifacts
+        [string]$OdditiesPath,
+        [string]$CyphersPath,
+        [string]$ArtifactsPath
     )
     $Settings = If (-not(Test-Path "$Global:Path\Settings.csv")) {
         [PSCustomObject]@{
@@ -23,13 +23,13 @@ function Set-Settings {
     }
 
     $NewSettings = Foreach ($Setting in $Settings) {
-        If ([string]::IsNullOrEmpty((Get-Variable $Setting.Setting -ErrorAction SilentlyContinue).value)) {
+        If ([string]::IsNullOrEmpty((Get-Variable "$($Setting.Setting)Path" -ErrorAction SilentlyContinue).value)) {
             $Setting 
         }
         Else { 
             [PSCustomObject]@{
                 "Setting" = $Setting.Setting 
-                "Path"    = (Get-Variable $Setting.Setting).Value
+                "Path"    = (Get-Variable "$($Setting.Setting)Path").Value
             }
         }
     }
