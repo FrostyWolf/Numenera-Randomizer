@@ -1,3 +1,3 @@
 $Global:Path = $PSScriptRoot
 Import-Module "$Path\num-ran"
-Set-Settings -OdditiesPath "https://docs.google.com/spreadsheets/d/1h8vYoEqY1uEo7FanuupdfOCIPtko-UVdQf4QePn2bAM/edit?usp=sharing" -CyphersPath "https://docs.google.com/spreadsheets/d/1mKOc31GjmexxSvISSBbkYqMLWyVk1txbpmu477mVQIM/edit?usp=sharing" -ArtifactsPath "https://docs.google.com/spreadsheets/d/1EFoHxzh_UgmAdPxk8xenrp-4aS2pvU5YflXR9yX4r9c/edit?usp=sharing"
+Show-NumeneraRandomizer.ps1
