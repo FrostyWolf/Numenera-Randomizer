@@ -4,23 +4,8 @@ function Set-Settings {
         [string]$CyphersPath,
         [string]$ArtifactsPath
     )
-    $Settings = If (-not(Test-Path "$Global:Path\Settings.csv")) {
-        [PSCustomObject]@{
-            "Setting" = "Oddities"
-            "Path"    = "$Global:Path\Oddities.csv"
-        } 
-        [PSCustomObject]@{
-            "Setting" = "Cyphers"
-            "Path"    = "$Global:Path\Cyphers.csv"
-        }
-        [PSCustomObject]@{
-            "Setting" = "Artifacts"
-            "Path"    = "$Global:Path\Artifacts.csv"
-        }
-    }
-    Else {
-        Import-Csv "$Global:Path\Settings.csv"
-    }
+
+    $Settings = $Settings = Test-Settings
 
     $NewSettings = Foreach ($Setting in $Settings) {
         If ([string]::IsNullOrEmpty((Get-Variable "$($Setting.Setting)Path" -ErrorAction SilentlyContinue).value)) {
