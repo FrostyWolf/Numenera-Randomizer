@@ -234,9 +234,9 @@ Function Show-NumeneraRandomizer {
             Get-Settings
             $tabOddities.Text = "Oddities $($Oddities.count)"
             $tabOddities.Refresh()
-            $tabCyphers.Text = "Oddities $($Cyphers.count)"
+            $tabCyphers.Text = "Cyphers $($Cyphers.count)"
             $tabCyphers.Refresh()
-            $tabArtifacts.Text = "Oddities $($Artifacts.count)"
+            $tabArtifacts.Text = "Artifacts $($Artifacts.count)"
             $tabArtifacts.Refresh()
             $TabControl.Refresh()
             $RandomizerMain.Refresh()
