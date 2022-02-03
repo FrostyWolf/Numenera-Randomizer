@@ -233,11 +233,29 @@ Function Show-NumeneraRandomizer {
             Set-Settings -OdditiesPath $TextboxTSOddities.text -CyphersPath $TextboxTSCyphers.text -ArtifactsPath $TextboxTSArtifacts.text
             Get-Settings
             $tabOddities.Text = "Oddities $($Oddities.count)"
+            $Oddity = $Oddities[(Get-Random $Oddities.count)]
+            $TextboxOddities.text = "$($Oddity.Description) `r`n`r`n$($Oddity.Book) (Page: $($Oddity.Page))"
+            $TextboxOddities.Refresh()
+            $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Oddity.Description) + 1
+            $TextboxIndexOddities.Refresh()
             $tabOddities.Refresh()
+
             $tabCyphers.Text = "Cyphers $($Cyphers.count)"
+            $Cypher = $Cyphers[(Get-Random $Cyphers.count)]
+            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`n$($Cypher.Description) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
+            $TextboxCyphers.Refresh()
+            $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Description, $Cypher.Description) + 1
+            $TextboxIndexCyphers.Refresh()
             $tabCyphers.Refresh()
+
             $tabArtifacts.Text = "Artifacts $($Artifacts.count)"
+            $Artifact = $Artifacts[(Get-Random $Artifacts.count)]
+            $TextboxArtifacts.text = "$($Artifact.Name) `r`nLevel: $($Artifact.Level) `r`nEffect: $($Artifact.Effect) `r`nDepletion: $($Artifact.Depletion) `r`n`r`n$($Artifact.Book) (Page: $($Artifact.Page))"
+            $TextboxArtifacts.Refresh()
+            $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Effect, $Artifact.Effect) + 1
+            $TextboxIndexArtifacts.Refresh()
             $tabArtifacts.Refresh()
+
             $TabControl.Refresh()
             $RandomizerMain.Refresh()
         })
