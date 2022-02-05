@@ -5,7 +5,7 @@ Function Show-NumeneraRandomizer {
     Get-Settings
 
     $Oddity = $Oddities[(Get-Random $Oddities.count)]
-    $Cypher = $Cyphers[(Get-Random $Cyphers.count)]
+    $Cypher = Get-RandomCypher
     $Artifact = $Artifacts[(Get-Random $Artifacts.count)]
 
     #Create Main Form
@@ -93,7 +93,7 @@ Function Show-NumeneraRandomizer {
     $TextboxCyphers = New-Object System.Windows.Forms.Textbox
     $TextboxCyphers.Location = New-Object System.Drawing.Point(1, 1)
     $TextboxCyphers.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`n$($Cypher.Description) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
+    $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`nForm: $($Cypher.Form)`r`nEffect: $($Cypher.Effect) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
     $TextboxCyphers.Multiline = $true
     $TextboxCyphers.WordWrap = $true
     $TextboxCyphers.Scrollbars = "Vertical"
@@ -105,10 +105,10 @@ Function Show-NumeneraRandomizer {
     $RandomButtonCyphers.Location = New-Object System.Drawing.Point(1, 307)
     $RandomButtonCyphers.AutoSize = $true
     $RandomButtonCyphers.add_Click({
-            $Cypher = $Cyphers[(Get-Random $Cyphers.count)]
-            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`n$($Cypher.Description) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
+            $Cypher = Get-RandomCypher
+            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`nForm: $($Cypher.Form)`r`nEffect: $($Cypher.Effect) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
             $TextboxCyphers.Refresh()
-            $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Description, $Cypher.Description) + 1
+            $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Name, $Cypher.Name) + 1
             $TextboxIndexCyphers.Refresh()
             $tabCyphers.Refresh()
             $TabControl.Refresh()
@@ -120,7 +120,7 @@ Function Show-NumeneraRandomizer {
     $TextboxIndexCyphers = New-Object System.Windows.Forms.Textbox
     $TextboxIndexCyphers.Location = New-Object System.Drawing.Point(330, 309)
     $TextboxIndexCyphers.Size = New-Object System.Drawing.Size(30, 12)
-    $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Description, $Cypher.Description) + 1
+    $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Name, $Cypher.Name) + 1
     $tabCyphers.Controls.Add($TextboxIndexCyphers)
 
     #Create Cyphers Goto Button
@@ -129,8 +129,8 @@ Function Show-NumeneraRandomizer {
     $GotoButtonCyphers.Location = New-Object System.Drawing.Point(250, 307)
     $GotoButtonCyphers.AutoSize = $true
     $GotoButtonCyphers.add_Click({
-            $Cypher = $Cyphers[([int]$TextboxIndexCyphers.text - 1)]
-            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`n$($Cypher.Description) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
+            $Cypher = Get-RandomCypher
+            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`nForm: $($Cypher.Form)`r`nEffect: $($Cypher.Effect) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
             $TextboxCyphers.Refresh()
             $tabCyphers.Refresh()
             $TabControl.Refresh()
@@ -241,10 +241,10 @@ Function Show-NumeneraRandomizer {
             $tabOddities.Refresh()
 
             $tabCyphers.Text = "Cyphers $($Cyphers.count)"
-            $Cypher = $Cyphers[(Get-Random $Cyphers.count)]
-            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`n$($Cypher.Description) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
+            $Cypher = Get-RandomCypher
+            $TextboxCyphers.text = "$($Cypher.Name) `r`nLevel: $($Cypher.Level) `r`nForm: $($Cypher.Form)`r`nEffect: $($Cypher.Effect) `r`n`r`n$($Cypher.Book) (Page: $($Cypher.Page))"
             $TextboxCyphers.Refresh()
-            $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Description, $Cypher.Description) + 1
+            $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Name, $Cypher.Name) + 1
             $TextboxIndexCyphers.Refresh()
             $tabCyphers.Refresh()
 
