@@ -23,7 +23,7 @@ Function Get-Cypher {
 
    $RolledCypher = [PSCustomObject]@{
       Name   = $SelectedCypher.Name
-      Level  = $SelectedCypher.Level
+      Level  = Get-DiceRoll ($SelectedCypher.Level)
       Form   = (Get-Culture).textinfo.totitlecase((Get-Random ($SelectedCypher.Form -split ", ")))
       Effect = $UnrolledCypher.Effect
       Book   = $SelectedCypher.Book

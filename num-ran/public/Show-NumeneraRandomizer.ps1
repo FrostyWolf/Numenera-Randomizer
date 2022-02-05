@@ -94,7 +94,7 @@ Function Show-NumeneraRandomizer {
     $TextboxCyphers = New-Object System.Windows.Forms.Textbox
     $TextboxCyphers.Location = New-Object System.Drawing.Point(1, 1)
     $TextboxCyphers.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxCyphers.text = Get-CypherText $Script:Cypher.Rolled
+    $TextboxCyphers.text = Get-CypherText $Script:Cypher.$Script:CypherDisplay
     $TextboxCyphers.Multiline = $true
     $TextboxCyphers.WordWrap = $true
     $TextboxCyphers.Scrollbars = "Vertical"
@@ -107,10 +107,7 @@ Function Show-NumeneraRandomizer {
     $RandomButtonCyphers.AutoSize = $true
     $RandomButtonCyphers.add_Click({
             $Script:Cypher = Get-Cypher -Random
-            $Script:CypherDisplay = "Rolled"
-            $DisplayButtonCyphers.text = "Display: $Script:CypherDisplay"
-            $DisplayButtonCyphers.Refresh()
-            $TextboxCyphers.text = Get-CypherText $Script:Cypher.Rolled
+            $TextboxCyphers.text = Get-CypherText $Script:Cypher.$Script:CypherDisplay
             $TextboxCyphers.Refresh()
             $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Name, $Script:Cypher.Rolled.Name) + 1
             $TextboxIndexCyphers.Refresh()
@@ -160,7 +157,7 @@ Function Show-NumeneraRandomizer {
     $GotoButtonCyphers.AutoSize = $true
     $GotoButtonCyphers.add_Click({
             $Script:Cypher = Get-Cypher ($TextboxIndexCyphers.text - 1)
-            $TextboxCyphers.text = Get-CypherText $Script:Cypher.Rolled
+            $TextboxCyphers.text = Get-CypherText $Script:Cypher.$Script:CypherDisplay
             $TextboxCyphers.Refresh()
             $tabCyphers.Refresh()
             $TabControl.Refresh()
@@ -272,7 +269,7 @@ Function Show-NumeneraRandomizer {
 
             $tabCyphers.Text = "Cyphers $($Cyphers.count)"
             $Script:Cypher = Get-Cypher
-            $TextboxCyphers.text = Get-CypherText $Script:Cypher.Rolled
+            $TextboxCyphers.text = Get-CypherText $Script:Cypher.$Script:CypherDisplay
             $TextboxCyphers.Refresh()
             $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Name, $Script:Cypher.Rolled.Name) + 1
             $TextboxIndexCyphers.Refresh()
