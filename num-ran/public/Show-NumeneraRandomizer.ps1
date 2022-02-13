@@ -7,7 +7,8 @@ Function Show-NumeneraRandomizer {
     $Oddity = $Oddities[(Get-Random $Oddities.count)]
     $Script:Cypher = Get-Cypher -Random
     $Script:CypherDisplay = "Rolled"
-    $Artifact = $Artifacts[(Get-Random $Artifacts.count)]
+    $Script:Artifact = Get-Artifact -Random
+    $Script:ArtifactDisplay = "Rolled"
 
     #Create Main Form
     $RandomizerMain = New-Object System.Windows.Forms.Form
@@ -184,7 +185,7 @@ Function Show-NumeneraRandomizer {
     $TextboxArtifacts = New-Object System.Windows.Forms.Textbox
     $TextboxArtifacts.Location = New-Object System.Drawing.Point(1, 1)
     $TextboxArtifacts.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxArtifacts.text = "$($Artifact.Name) `r`nLevel: $($Artifact.Level) `r`nEffect: $($Artifact.Effect) `r`nDepletion: $($Artifact.Depletion) `r`n`r`n$($Artifact.Book) (Page: $($Artifact.Page))"
+    $TextboxArtifacts.text = Get-ArtifactText $Script:Artifact.$Script:ArtifactDisplay
     $TextboxArtifacts.Multiline = $true
     $TextboxArtifacts.WordWrap = $true
     $TextboxArtifacts.Scrollbars = "Vertical"
@@ -196,10 +197,10 @@ Function Show-NumeneraRandomizer {
     $RandomButtonArtifacts.Location = New-Object System.Drawing.Point(1, 307)
     $RandomButtonArtifacts.AutoSize = $true
     $RandomButtonArtifacts.add_Click({
-            $Artifact = $Artifacts[(Get-Random $Artifacts.count)]
-            $TextboxArtifacts.text = "$($Artifact.Name) `r`nLevel: $($Artifact.Level) `r`nEffect: $($Artifact.Effect) `r`nDepletion: $($Artifact.Depletion) `r`n`r`n$($Artifact.Book) (Page: $($Artifact.Page))"
+            $Script:Artifact = Get-Artifact -Random
+            $TextboxArtifacts.text = Get-ArtifactText $Script:Artifact.$Script:ArtifactDisplay
             $TextboxArtifacts.Refresh()
-            $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Effect, $Artifact.Effect) + 1
+            $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Name, $Script:Artifact.Rolled.Name) + 1
             $TextboxIndexArtifacts.Refresh()
             $tabArtifacts.Refresh()
             $TabControl.Refresh()
@@ -207,11 +208,37 @@ Function Show-NumeneraRandomizer {
         })
     $tabArtifacts.Controls.Add($RandomButtonArtifacts)
 
+    #Create Artifact Display Button
+    $DisplayButtonArtifacts = New-Object System.Windows.Forms.Button
+    $DisplayButtonArtifacts.text = "Display: $Script:ArtifactDisplay"
+    $DisplayButtonArtifacts.Location = New-Object System.Drawing.Point(120, 307)
+    $DisplayButtonArtifacts.AutoSize = $true
+    $DisplayButtonArtifacts.add_Click({
+            If ($Script:ArtifactDisplay -eq "Rolled") {
+                $Script:ArtifactDisplay = "Unrolled"
+            }
+            Elseif ($Script:ArtifactDisplay -eq "Unrolled") {
+                $Script:ArtifactDisplay = "Raw"
+            }
+            Else {
+                $Script:ArtifactDisplay = "Rolled"
+            }
+            $DisplayButtonArtifacts.text = "Display: $Script:ArtifactDisplay"
+            $DisplayButtonArtifacts.Refresh()
+            $TextboxArtifacts.text = Get-ArtifactText $Script:Artifact.$Script:ArtifactDisplay
+            $TextboxArtifacts.Refresh()
+            $tabArtifacts.Refresh()
+            $TabControl.Refresh()
+            $RandomizerMain.Refresh()
+
+        })
+    $tabArtifacts.Controls.Add($DisplayButtonArtifacts)
+
     #Create Artifacts Goto Textbox
     $TextboxIndexArtifacts = New-Object System.Windows.Forms.Textbox
     $TextboxIndexArtifacts.Location = New-Object System.Drawing.Point(330, 309)
     $TextboxIndexArtifacts.Size = New-Object System.Drawing.Size(30, 12)
-    $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Effect, $Artifact.Effect) + 1
+    $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Name, $Script:Artifact.Rolled.Name) + 1
     $tabArtifacts.Controls.Add($TextboxIndexArtifacts)
 
     #Create Artifacts Goto Button
@@ -220,8 +247,8 @@ Function Show-NumeneraRandomizer {
     $GotoButtonArtifacts.Location = New-Object System.Drawing.Point(250, 307)
     $GotoButtonArtifacts.AutoSize = $true
     $GotoButtonArtifacts.add_Click({
-            $Artifact = $Artifacts[([int]$TextboxIndexArtifacts.text - 1)]
-            $TextboxArtifacts.text = "$($Artifact.Name) `r`nLevel: $($Artifact.Level) `r`nEffect: $($Artifact.Effect) `r`nDepletion: $($Artifact.Depletion) `r`n`r`n$($Artifact.Book) (Page: $($Artifact.Page))"
+            $Script:Artifact = Get-Artifact ($TextboxIndexArtifacts.text - 1)
+            $TextboxArtifacts.text = Get-ArtifactText $Script:Artifact.$Script:ArtifactDisplay
             $TextboxArtifacts.Refresh()
             $tabArtifacts.Refresh()
             $TabControl.Refresh()
@@ -268,7 +295,7 @@ Function Show-NumeneraRandomizer {
             $tabOddities.Refresh()
 
             $tabCyphers.Text = "Cyphers $($Cyphers.count)"
-            $Script:Cypher = Get-Cypher
+            $Script:Cypher = Get-Cypher -Random
             $TextboxCyphers.text = Get-CypherText $Script:Cypher.$Script:CypherDisplay
             $TextboxCyphers.Refresh()
             $TextboxIndexCyphers.text = [array]::indexof($Cyphers.Name, $Script:Cypher.Rolled.Name) + 1
@@ -276,10 +303,10 @@ Function Show-NumeneraRandomizer {
             $tabCyphers.Refresh()
 
             $tabArtifacts.Text = "Artifacts $($Artifacts.count)"
-            $Artifact = $Artifacts[(Get-Random $Artifacts.count)]
-            $TextboxArtifacts.text = "$($Artifact.Name) `r`nLevel: $($Artifact.Level) `r`nEffect: $($Artifact.Effect) `r`nDepletion: $($Artifact.Depletion) `r`n`r`n$($Artifact.Book) (Page: $($Artifact.Page))"
+            $Script:Artifact = Get-Artifact -Random
+            $TextboxArtifacts.text = Get-ArtifactText $Script:Artifact.$Script:ArtifactDisplay
             $TextboxArtifacts.Refresh()
-            $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Effect, $Artifact.Effect) + 1
+            $TextboxIndexArtifacts.text = [array]::indexof($Artifacts.Name, $Script:Artifact.Rolled.Name) + 1
             $TextboxIndexArtifacts.Refresh()
             $tabArtifacts.Refresh()
 
