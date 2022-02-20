@@ -4,7 +4,8 @@ Function Show-NumeneraRandomizer {
     $Settings = Test-Settings
     Get-Settings
 
-    $Oddity = $Oddities[(Get-Random $Oddities.count)]
+    $Script:Odditie = Get-Odditie -Random
+    $Script:OdditieDisplay = "Rolled"
     $Script:Cypher = Get-Cypher -Random
     $Script:CypherDisplay = "Rolled"
     $Script:Artifact = Get-Artifact -Random
@@ -31,7 +32,7 @@ Function Show-NumeneraRandomizer {
     $TextboxOddities = New-Object System.Windows.Forms.Textbox
     $TextboxOddities.Location = New-Object System.Drawing.Point(1, 1)
     $TextboxOddities.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxOddities.text = "$($Oddity.Description) `r`n`r`n$($Oddity.Book) (Page: $($Oddity.Page))"
+    $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
     $TextboxOddities.Multiline = $true
     $TextboxOddities.WordWrap = $true
     $TextboxOddities.Scrollbars = "Vertical"
@@ -43,10 +44,10 @@ Function Show-NumeneraRandomizer {
     $RandomButtonOddities.Location = New-Object System.Drawing.Point(1, 307)
     $RandomButtonOddities.AutoSize = $true
     $RandomButtonOddities.add_Click({
-            $Oddity = $Oddities[(Get-Random $Oddities.count)]
-            $TextboxOddities.text = "$($Oddity.Description) `r`n`r`n$($Oddity.Book) (Page: $($Oddity.Page))"
+            $Script:Odditie = Get-Odditie -Random
+            $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
             $TextboxOddities.Refresh()
-            $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Oddity.Description) + 1
+            $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Script:Odditie.Rolled.Description) + 1
             $TextboxIndexOddities.Refresh()
             $tabOddities.Refresh()
             $TabControl.Refresh()
@@ -54,11 +55,38 @@ Function Show-NumeneraRandomizer {
         })
     $tabOddities.Controls.Add($RandomButtonOddities)
 
+    #Create Oddities Display Button
+    $DisplayButtonOddities = New-Object System.Windows.Forms.Button
+    $DisplayButtonOddities.text = "Display: $Script:OdditieDisplay"
+    $DisplayButtonOddities.Location = New-Object System.Drawing.Point(120, 307)
+    $DisplayButtonOddities.AutoSize = $true
+    $DisplayButtonOddities.add_Click({
+            If ($Script:OdditieDisplay -eq "Rolled") {
+                $Script:OdditieDisplay = "Unrolled"
+            }
+            Elseif ($Script:OdditieDisplay -eq "Unrolled") {
+                $Script:OdditieDisplay = "Raw"
+            }
+            Else {
+                $Script:OdditieDisplay = "Rolled"
+            }
+            $DisplayButtonOddities.text = "Display: $Script:OdditieDisplay"
+            $DisplayButtonOddities.Refresh()
+            $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
+            $TextboxOddities.Refresh()
+            $tabOddities.Refresh()
+            $TabControl.Refresh()
+            $RandomizerMain.Refresh()
+    
+        })
+    $tabOddities.Controls.Add($DisplayButtonOddities)
+    
+
     #Create Oddities Goto Textbox
     $TextboxIndexOddities = New-Object System.Windows.Forms.Textbox
     $TextboxIndexOddities.Location = New-Object System.Drawing.Point(330, 309)
     $TextboxIndexOddities.Size = New-Object System.Drawing.Size(30, 12)
-    $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Oddity.Description) + 1
+    $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Script:Odditie.Rolled.Description) + 1
     $tabOddities.Controls.Add($TextboxIndexOddities)
 
     #Create Oddities Goto Button
@@ -67,8 +95,8 @@ Function Show-NumeneraRandomizer {
     $GotoButtonOddities.Location = New-Object System.Drawing.Point(250, 307)
     $GotoButtonOddities.AutoSize = $true
     $GotoButtonOddities.add_Click({
-            $Oddity = $Oddities[([int]$TextboxIndexOddities.text - 1)]
-            $TextboxOddities.text = "$($Oddity.Description) `r`n`r`n$($Oddity.Book) (Page: $($Oddity.Page))"
+            $Odditie = $Oddities[([int]$TextboxIndexOddities.text - 1)]
+            $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
             $TextboxOddities.Refresh()
             $tabOddities.Refresh()
             $TabControl.Refresh()
@@ -287,10 +315,10 @@ Function Show-NumeneraRandomizer {
             Set-Settings -OdditiesPath $TextboxTSOddities.text -CyphersPath $TextboxTSCyphers.text -ArtifactsPath $TextboxTSArtifacts.text
             Get-Settings
             $tabOddities.Text = "Oddities $($Oddities.count)"
-            $Oddity = $Oddities[(Get-Random $Oddities.count)]
-            $TextboxOddities.text = "$($Oddity.Description) `r`n`r`n$($Oddity.Book) (Page: $($Oddity.Page))"
+            $Script:Odditie = Get-Odditie -Random
+            $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
             $TextboxOddities.Refresh()
-            $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Oddity.Description) + 1
+            $TextboxIndexOddities.text = [array]::indexof($Oddities.Description, $Script:Odditie.Rolled.Description) + 1
             $TextboxIndexOddities.Refresh()
             $tabOddities.Refresh()
 
