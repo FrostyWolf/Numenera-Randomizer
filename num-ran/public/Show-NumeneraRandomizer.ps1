@@ -4,13 +4,6 @@ Function Show-NumeneraRandomizer {
     $Settings = Test-Settings
     Get-Settings
 
-    $Script:Odditie = Get-Odditie -Random
-    $Script:OdditieDisplay = "Rolled"
-    $Script:Cypher = Get-Cypher -Random
-    $Script:CypherDisplay = "Rolled"
-    $Script:Artifact = Get-Artifact -Random
-    $Script:ArtifactDisplay = "Rolled"
-
     #Create Main Form
     $RandomizerMain = New-Object System.Windows.Forms.Form
     $RandomizerMain.Size = New-Object System.Drawing.Size(610, 360)
@@ -22,11 +15,25 @@ Function Show-NumeneraRandomizer {
     $TabControl.Location = New-Object System.Drawing.Size(0, 0)
     $TabControl.Size = New-Object System.Drawing.Size(610, 360)
     $TabControl.AutoSize = $true
+    
+    #List of Tabs / Possibly Generate this in future from settings
+    $Items = @("Odditie", "Cypher", "Artifact")
 
-    #Create Oddities Tab
-    $tabOddities = New-Object System.Windows.Forms.TabPage
-    $tabOddities.Name = "Oddities"
-    $tabOddities.Text = "Oddities $($Oddities.count)"
+    #Loop that does all the magic per item
+    $Items.foreach({
+            #Sets singular and plural name variables to make code a little eaiser to understand
+            $singular = $_
+            $plural = $_ + "s"
+
+            #Pick random items for initial run and set display status
+            Set-Variable -Name $singular -Value (Invoke-Expression "Get-$singular -Random") -Scope Script
+            Set-Variable -Name ($singular + "Display") -Value "Rolled" -Scope Script
+
+            #Create Tabs
+            Set-Variable -Name "tab$plural" -Value (New-Object System.Windows.Forms.TabPage)
+            Invoke-Expression ("`$tab$plural.name = `"$plural`"")
+            Invoke-Expression ("`$tab$plural.text = `"$plural `$`(`$$plural.count`)`"")
+        })
 
     #Create Oddities Textbox
     $TextboxOddities = New-Object System.Windows.Forms.Textbox
@@ -114,11 +121,6 @@ Function Show-NumeneraRandomizer {
 
     $TabControl.TabPages.Add($tabOddities)
 
-    #Create Cyphers Tab
-    $tabCyphers = New-Object System.Windows.Forms.TabPage
-    $tabCyphers.Name = "Cyphers"
-    $tabCyphers.Text = "Cyphers $($Cyphers.count)"
-
     #Create Cyphers Textbox
     $TextboxCyphers = New-Object System.Windows.Forms.Textbox
     $TextboxCyphers.Location = New-Object System.Drawing.Point(1, 1)
@@ -203,11 +205,6 @@ Function Show-NumeneraRandomizer {
     $tabCyphers.Controls.Add($CopyButtonCyphers)
 
     $TabControl.TabPages.Add($tabCyphers)
-
-    #Create Artifacts Tab
-    $tabArtifacts = New-Object System.Windows.Forms.TabPage
-    $tabArtifacts.Name = "Artifacts"
-    $tabArtifacts.Text = "Artifacts $($Artifacts.count)"
 
     #Create Artifacts Textbox
     $TextboxArtifacts = New-Object System.Windows.Forms.Textbox
