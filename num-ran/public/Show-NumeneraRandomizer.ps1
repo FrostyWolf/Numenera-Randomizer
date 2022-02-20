@@ -29,21 +29,26 @@ Function Show-NumeneraRandomizer {
             Set-Variable -Name $singular -Value (Invoke-Expression "Get-$singular -Random") -Scope Script
             Set-Variable -Name ($singular + "Display") -Value "Rolled" -Scope Script
 
+            #Define Properties for Form Objects
+            $TextboxLocation = New-Object System.Drawing.Point(1, 1)
+            $TextboxSize = New-Object System.Drawing.Size(600, 300)
+            $TextboxText = Invoke-Expression ("Get-$singular" + "Text `$Script:$singular.`$Script:$singular" + "Display")
+
             #Create Tabs
             Set-Variable -Name "tab$plural" -Value (New-Object System.Windows.Forms.TabPage)
             Invoke-Expression ("`$tab$plural.name = `"$plural`"")
             Invoke-Expression ("`$tab$plural.text = `"$plural `$`(`$$plural.count`)`"")
-        })
 
-    #Create Oddities Textbox
-    $TextboxOddities = New-Object System.Windows.Forms.Textbox
-    $TextboxOddities.Location = New-Object System.Drawing.Point(1, 1)
-    $TextboxOddities.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
-    $TextboxOddities.Multiline = $true
-    $TextboxOddities.WordWrap = $true
-    $TextboxOddities.Scrollbars = "Vertical"
-    $tabOddities.Controls.Add($TextboxOddities)
+            #Create Textbox
+            Set-Variable -Name "Textbox$plural" -Value (New-Object System.Windows.Forms.Textbox)
+            Invoke-Expression ("`$Textbox$plural.Location = `$TextboxLocation")
+            Invoke-Expression ("`$Textbox$plural.Size = `$TextboxSize")
+            Invoke-Expression ("`$Textbox$plural.Text = `$TextboxText")
+            Invoke-Expression ("`$Textbox$plural.Multiline = `$True")
+            Invoke-Expression ("`$Textbox$plural.WordWrap = `$True")
+            Invoke-Expression ("`$Textbox$plural.Scrollbars = `"Vertical`"")
+            Invoke-Expression ("`$tab$plural.Controls.Add(`$Textbox$plural)")
+        })
 
     #Create Oddities Random Button
     $RandomButtonOddities = New-Object System.Windows.Forms.Button
@@ -102,7 +107,7 @@ Function Show-NumeneraRandomizer {
     $GotoButtonOddities.Location = New-Object System.Drawing.Point(250, 307)
     $GotoButtonOddities.AutoSize = $true
     $GotoButtonOddities.add_Click({
-            $Odditie = $Oddities[([int]$TextboxIndexOddities.text - 1)]
+            $Script:Odditie = Get-Odditie ($TextboxIndexOddities.text - 1)
             $TextboxOddities.text = Get-OdditieText $Script:Odditie.$Script:OdditieDisplay
             $TextboxOddities.Refresh()
             $tabOddities.Refresh()
@@ -120,16 +125,6 @@ Function Show-NumeneraRandomizer {
     $tabOddities.Controls.Add($CopyButtonOddities)
 
     $TabControl.TabPages.Add($tabOddities)
-
-    #Create Cyphers Textbox
-    $TextboxCyphers = New-Object System.Windows.Forms.Textbox
-    $TextboxCyphers.Location = New-Object System.Drawing.Point(1, 1)
-    $TextboxCyphers.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxCyphers.text = Get-CypherText $Script:Cypher.$Script:CypherDisplay
-    $TextboxCyphers.Multiline = $true
-    $TextboxCyphers.WordWrap = $true
-    $TextboxCyphers.Scrollbars = "Vertical"
-    $tabCyphers.Controls.Add($TextboxCyphers)
 
     #Create Cyphers Random Button
     $RandomButtonCyphers = New-Object System.Windows.Forms.Button
@@ -205,16 +200,6 @@ Function Show-NumeneraRandomizer {
     $tabCyphers.Controls.Add($CopyButtonCyphers)
 
     $TabControl.TabPages.Add($tabCyphers)
-
-    #Create Artifacts Textbox
-    $TextboxArtifacts = New-Object System.Windows.Forms.Textbox
-    $TextboxArtifacts.Location = New-Object System.Drawing.Point(1, 1)
-    $TextboxArtifacts.Size = New-Object System.Drawing.Size(600, 300)
-    $TextboxArtifacts.text = Get-ArtifactText $Script:Artifact.$Script:ArtifactDisplay
-    $TextboxArtifacts.Multiline = $true
-    $TextboxArtifacts.WordWrap = $true
-    $TextboxArtifacts.Scrollbars = "Vertical"
-    $tabArtifacts.Controls.Add($TextboxArtifacts)
 
     #Create Artifacts Random Button
     $RandomButtonArtifacts = New-Object System.Windows.Forms.Button
